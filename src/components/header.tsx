@@ -30,6 +30,7 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { cn } from "@/lib/utils";
 import { Input } from "./ui/input";
+import { useRouter } from "next/navigation";
 
 const CATEGORIES = [
   { label: "Электроника", icon: "⚡" },
@@ -54,6 +55,7 @@ export default function YldamHeader() {
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
+  const route = useRouter()
 
   useEffect(() => {
     const handler = () => setIsScrolled(window.scrollY > 10);
@@ -100,9 +102,9 @@ export default function YldamHeader() {
         <div className=" mx-auto px-4 sm:px-6 lg:px-4">
           <div className="flex items-center gap-4 h-16 md:h-20">
             {/* Logo */}
-            <Link href="/" className="flex-shrink-0 flex items-center gap-2 group">
+            <Link href="/" className="shrink-0 flex items-center gap-2 group">
               <div className="relative">
-                <div className="w-9 h-9 md:w-11 md:h-11 rounded-xl bg-gradient-to-br from-[#F5A623] to-[#E8892E] flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
+                <div className="w-9 h-9 md:w-11 md:h-11 rounded-xl bg-linear-to-br from-[#F5A623] to-[#E8892E] flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
                   <span className="text-white font-extrabold text-lg md:text-xl leading-none tracking-tight">Y</span>
                 </div>
                 <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-[#0A2463] rounded-full flex items-center justify-center">
@@ -204,7 +206,7 @@ export default function YldamHeader() {
                 className="relative text-[#4A5568] hover:text-[#E8892E] hover:bg-[#FFF7ED] rounded-xl h-11 w-11"
               >
                 <Heart className="w-5 h-5" />
-                <Badge className="absolute -top-0.5 -right-0.5 h-4 min-w-[1rem] px-1 text-[10px] bg-[#F5A623] text-white border-white border hover:bg-[#E8892E]">
+                <Badge className="absolute -top-0.5 -right-0.5 h-4 min-w-4 px-1 text-[10px] bg-[#F5A623] text-white border-white border hover:bg-[#E8892E]">
                   3
                 </Badge>
               </Button>
@@ -216,7 +218,7 @@ export default function YldamHeader() {
                 className="relative text-[#4A5568] hover:text-[#0A2463] hover:bg-[#EBF4FF] rounded-xl h-11 w-11"
               >
                 <ShoppingCart className="w-5 h-5" />
-                <Badge className="absolute -top-0.5 -right-0.5 h-4 min-w-[1rem] px-1 text-[10px] bg-[#0A2463] text-white border-white border hover:bg-[#0A2463]">
+                <Badge className="absolute -top-0.5 -right-0.5 h-4 min-w-4 px-1 text-[10px] bg-[#0A2463] text-white border-white border hover:bg-[#0A2463]">
                   7
                 </Badge>
               </Button>
@@ -239,10 +241,10 @@ export default function YldamHeader() {
                     <p className="text-xs text-gray-400">Не авторизованы</p>
                   </div>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem className="rounded-xl px-3 py-2.5 font-semibold text-[#0A2463] hover:bg-[#EBF4FF] cursor-pointer">
+                  <DropdownMenuItem onClick={() => route.push('/login')} className="rounded-xl px-3 py-2.5 font-semibold text-[#0A2463] hover:bg-[#EBF4FF] cursor-pointer">
                     Войти
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="rounded-xl px-3 py-2.5 font-medium text-[#4A5568] hover:bg-gray-50 cursor-pointer">
+                  <DropdownMenuItem onClick={() => route.push('/register')} className="rounded-xl px-3 py-2.5 font-medium text-[#4A5568] hover:bg-gray-50 cursor-pointer">
                     Зарегистрироваться
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />

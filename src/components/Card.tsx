@@ -73,7 +73,7 @@ export default function Card({ product, className }: CardProps) {
         {/* Gradient overlay on hover */}
         <div
           className={cn(
-            'absolute inset-0 bg-gradient-to-t from-black/20 to-transparent transition-opacity duration-300',
+            'absolute inset-0 bg-linear-to-t from-black/20 to-transparent transition-opacity duration-300',
             isHovered ? 'opacity-100' : 'opacity-0',
           )}
         />
