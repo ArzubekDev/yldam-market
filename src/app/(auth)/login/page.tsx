@@ -69,9 +69,9 @@ export default function LoginComponent() {
 
       {/* Разделитель */}
       <div className="relative flex py-5 items-center">
-        <div className="flex-grow border-t border-slate-100"></div>
-        <span className="flex-shrink mx-4 text-slate-400 text-xs">или войти через</span>
-        <div className="flex-grow border-t border-slate-100"></div>
+        <div className="grow border-t border-slate-100"></div>
+        <span className="shrink mx-4 text-slate-400 text-xs">или войти через</span>
+        <div className="grow border-t border-slate-100"></div>
       </div>
 
       {/* Социальные кнопки */}
