@@ -1,9 +1,32 @@
 'use client';
 import { ArrowRight, Eye, EyeOff, Lock, Mail } from 'lucide-react';
-import React from 'react';
+import React, { useRef, useState } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 export default function LoginComponent() {
   const [showPassword, setShowPassword] = React.useState(false);
+  const { executeRecaptcha } = useGoogleReCaptcha();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!executeRecaptcha) return;
+
+    // v3 — пользователь ничего не видит, токен получается автоматически
+    const token = await executeRecaptcha('login');
+
+    await fetch('http://localhost:4000/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'recaptcha': token,
+      },
+      body: JSON.stringify({ email, password }),
+    });
+  };
 
   return (
     <div className="mt-20 w-full max-w-md mx-auto bg-white rounded-2xl border border-slate-100 p-8 shadow-xl font-sans">
