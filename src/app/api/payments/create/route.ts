@@ -33,9 +33,8 @@ export async function POST(request: Request) {
       path: '/v1/payment',
       headers: {
         Host: host,
-        'Content-Type': 'application/json',
-        'X-API-KEY': apiKey,
-        'X-API-TIMESTAMP': timestamp,
+        'x-api-key': apiKey,
+        'x-api-timestamp': timestamp,
       },
       body,
     };

@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
 
-import { RecaptchaProvider } from '@/components/recaptch-provider';
 import { Golos_Text, Manrope } from 'next/font/google';
 
 const manrope = Manrope({
@@ -29,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${manrope.variable} ${golos.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
-        <RecaptchaProvider>{children}</RecaptchaProvider>
+       {children}
       </body>
     </html>
   );

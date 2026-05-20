@@ -28,43 +28,45 @@ export default function ProductDetails({ product }: ProductDetailsProps) {
   const [isAddedToCart, setIsAddedToCart] = useState(false);
   const [qty, setQty] = useState(1);
 
-  const formatPrice = (price: number) =>
-    price.toLocaleString('ru-KG') + ' ' + product.currency;
+  const formatPrice = (price: number) => price.toLocaleString('ru-KG') + ' ' + product.currency;
 
   const handleAddToCart = () => {
     setIsAddedToCart(true);
     setTimeout(() => setIsAddedToCart(false), 1800);
   };
 
-const handlePayment = async () => {
-  try {
-    // Считаем общую стоимость: цена товара * количество
-    const totalAmount = product.price * qty;
+  const handlePayment = async () => {
+    try {
+      const totalAmount = product.price * qty;
 
-    const response = await fetch('/api/payments/create', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amount: totalAmount }), // Передаем реальную сумму
-    });
+      const response = await fetch('/api/payments/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount: totalAmount }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (data.url) {
-      // Перенаправляем на шлюз Finik
-      window.location.href = data.url; 
-    } else {
-      alert('Ошибка при создании платежа');
+      // Если бэкенд вернул статус не 200, выкидываем ошибку в catch
+      if (!response.ok) {
+        throw new Error(data.error || 'Не удалось создать сессию платежа');
+      }
+
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error('Ссылка на оплату не получена от сервера');
+      }
+    } catch (error: any) {
+      console.error('Payment error:', error);
+      // Вместо обычного алерта здесь круто бы зашёл toast.error() из shadcn/ui
+      alert(`Ошибка платежа: ${error.message || 'Проверьте подключение к интернету'}`);
     }
-  } catch (error) {
-    console.error("Payment error:", error);
-    alert('Произошла ошибка при обработке платежа');
-  }
-};
+  };
 
   const prevImage = () =>
     setImageIdx((i) => (i - 1 + product.images.length) % product.images.length);
-  const nextImage = () =>
-    setImageIdx((i) => (i + 1) % product.images.length);
+  const nextImage = () => setImageIdx((i) => (i + 1) % product.images.length);
 
   const savings = product.originalPrice - product.price;
 
@@ -81,9 +83,7 @@ const handlePayment = async () => {
             Каталог
           </Link>
           <span>/</span>
-          <span className="text-[#0A2463] font-medium truncate max-w-[200px]">
-            {product.name}
-          </span>
+          <span className="text-[#0A2463] font-medium truncate max-w-[200px]">{product.name}</span>
         </nav>
       </div>
 
@@ -190,7 +190,11 @@ const handlePayment = async () => {
             {[
               { icon: Shield, label: 'Гарантия', sub: product.warranty ?? '12 мес.' },
               { icon: RotateCcw, label: 'Возврат', sub: '14 дней' },
-              { icon: Package, label: 'Доставка', sub: product.deliveryDays === 1 ? 'Завтра' : `${product.deliveryDays} дн.` },
+              {
+                icon: Package,
+                label: 'Доставка',
+                sub: product.deliveryDays === 1 ? 'Завтра' : `${product.deliveryDays} дн.`,
+              },
             ].map(({ icon: Icon, label, sub }) => (
               <div
                 key={label}
@@ -314,15 +318,20 @@ const handlePayment = async () => {
             >
               {isAddedToCart ? (
                 <>
-                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <svg
+                    className="w-5 h-5"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                  >
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
                   Добавлено!
                 </>
               ) : (
                 <>
-                  <ShoppingCart className="w-5 h-5" />
-                  В корзину
+                  <ShoppingCart className="w-5 h-5" />В корзину
                 </>
               )}
             </button>
