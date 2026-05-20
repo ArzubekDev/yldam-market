@@ -24,7 +24,7 @@ export async function POST(request: Request) {
         accountId: accountId,
         merchantCategoryCode: '0742',
         name_en: 'Yldam Market Payment',
-        webhookUrl: 'http://localhost:3000/api/payments/webhook',
+        webhookUrl: `${process.env.NEXT_PUBLIC_APP_URL}/api/payments/webhooks/finik`,
       },
     };
 
@@ -33,8 +33,9 @@ export async function POST(request: Request) {
       path: '/v1/payment',
       headers: {
         Host: host,
-        'X-API-KEY': apiKey, // Изменено на верхний регистр
-        'X-API-TIMESTAMP': timestamp, // Изменено на верхний регистр
+        'Content-Type': 'application/json',
+        'X-API-KEY': apiKey,
+        'X-API-TIMESTAMP': timestamp,
       },
       body,
     };
